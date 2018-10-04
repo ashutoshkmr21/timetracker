@@ -1,0 +1,6 @@
+Hi {{ name }},
+{{ sender }} has rejected your timesheet because of following reason: {{message}}
+
+
+
+

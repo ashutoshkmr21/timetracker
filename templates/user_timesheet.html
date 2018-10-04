@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Welcome to TimeTrack{% endblock %}
+{% block content %}
+    <div style="width: 100%;border: 2px solid; margin-top: 100px">
+        <h3 style="text-align: center; ">Timesheet </h3>
+        {% if timesheet %}
+            <table style="width:100%;border: 1px solid ">
+                <tr style="width: 100%; border: 1px solid">
+                    <th>Project</th>
+                    <th>Issue Id</th>
+                    <th>Description</th>
+                    <th>Mon</th>
+                    <th>Tue</th>
+                    <th>Wed</th>
+                    <th>Thu</th>
+                    <th>Fri</th>
+                    <th>Sat</th>
+                    <th>Sun</th>
+                </tr>
+                {% for sheet in timesheet %}
+                    <tr style="width: 100%;border: 1px solid">
+                        <td style="text-align: center">{{ sheet.project.project_name }}</td>
+                        <td style="text-align: center">{{ sheet.issue_id }}</td>
+                        <td style="text-align: center">{{ sheet.issue_description }}</td>
+                        {% for data in weekdata %}
+                            {% if sheet.id == data.timesheet_id %}
+                                <td style="text-align: center">{{ data.time_spent }}</td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <h3 style="text-align: center">No Timesheet</h3>
+        {% endif %}
+    </div>
+{% endblock %}
+
+

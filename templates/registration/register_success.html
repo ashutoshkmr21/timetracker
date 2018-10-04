@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Registration Successful{% endblock %}
+{% block head %}
+Registration Completed Successfully
+{% endblock %}
+{% block content %}
+Thank you for registering. Your information has been
+saved in the database.
+<a href="{% url 'login' %}">Click Here</a> to login.
+{% endblock %}
+

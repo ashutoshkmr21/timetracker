@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Welcome to TimeTrack{% endblock %}
+{% block content %}
+    <script>
+        function showForm(){
+            document.getElementById("rejection_form").style.display="block";
+        }
+    </script>
+    <div style="width: 100%;border: 2px solid; margin-top: 100px">
+        <h3 style="text-align: center; ">Timesheet </h3>
+        <table style="width:100%;border: 1px solid ">
+            <tr style="width: 100%; border: 1px solid">
+                <th>Project</th>
+                <th>Issue Id</th>
+                <th>Description</th>
+                <th>Mon</th>
+                <th>Tue</th>
+                <th>Wed</th>
+                <th>Thu</th>
+                <th>Fri</th>
+                <th>Sat</th>
+                <th>Sun</th>
+            </tr>
+            {% for sheet in weekly_timesheet %}
+                <tr style="width: 100%;border: 1px solid">
+                    <td style="text-align: center">{{ sheet.project }}</td>
+                    <td style="text-align: center">{{ sheet.issue_id }}</td>
+                    <td style="text-align: center">{{ sheet.issue_description }}</td>
+                    <td style="text-align: center">{{ sheet.mon }}</td>
+                    <td style="text-align: center">{{ sheet.tue }}</td>
+                    <td style="text-align: center">{{ sheet.wed }}</td>
+                    <td style="text-align: center">{{ sheet.thu }}</td>
+                    <td style="text-align: center">{{ sheet.fri }}</td>
+                    <td style="text-align: center">{{ sheet.sat }}</td>
+                    <td style="text-align: center">{{ sheet.sun }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <a href="{% url 'send_response_mail' user.id %}?id={{ pk }}&date={{ start_date }}"><button value="Accept">Accept</button></a>
+    <a><button value="Reject" onclick="showForm()">Reject</button></a>
+
+    <form id="rejection_form" style ="display: none" method="get" action="/userinfo/send_response_mail/{{ user.id }}/">
+        <input type="hidden" value="{{ pk }}" name="id">
+        <label name="message">Rejection Message</label>
+        <textarea name="rejection_message" cols="20" rows="5" required="true"></textarea>
+        <input type="submit" value="Submit">
+    </form>
+
+{% endblock %}

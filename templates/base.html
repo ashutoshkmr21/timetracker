@@ -1,0 +1,44 @@
+{% load staticfiles %}
+<html>
+<head>
+    <script src={% static 'jquery.js' %}></script>
+
+    <script src={% static 'jquery.formset.js' %}></script>
+
+    <script src={% static 'jquery.json.js' %}></script>
+    <link rel="stylesheet" type="text/css" href={% static 'style3.css' %} />
+    <title>TimeTrack |{% block title %}{% endblock %}</title>
+    {% block external %}{% endblock %}
+</head>
+<body>
+<div id="nav">
+    {% if user.is_authenticated %}
+        <h1>Welcome {{ user.username }}</h1>
+        <a href="{% url 'main_page' %}"> Home</a>|
+
+        {% if org_admin %}
+            <a href="{% url 'org_members' %}">Org Members</a>|
+            <a href="{% url 'createProject' %}">Create Project</a>|
+            <a href="{% url 'project-list' %}">Edit Project</a>|
+            <a href="{% url 'activity_list' %}">Activity Log</a>|
+        {% endif %}
+
+        {% if team_admin %}
+            <a href="{% url 'team_members' %}">Team Members</a>|
+        {% endif %}
+
+        {% if team_admin or org_admin %}
+            <a href="{% url 'graphical_analysis' %}">Graphical Analysis</a>|
+        {% endif %}
+
+        {% if timesheet_flag %}
+            <a href="{% url 'timesheet_status' %}">Timesheet Status</a>|
+        {% endif %}
+
+        <a href="{% url 'logout' %}">logout</a>
+    {% endif %}
+</div>
+<h1>{% block head %}{% endblock %}</h1>
+{% block content %}{% endblock %}
+</body>
+</html>

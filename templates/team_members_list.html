@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Team Members</h1>
+    <div style="width: 500px;margin-left: 250px;border: 2px solid">
+        <table>
+            <tr>
+                <th style="width: 120px">Project</th>
+                <th style="width: 150px">Member</th>
+                <th style="width: 200px">View</th>
+            </tr>
+            {#            {% for p_obj in projects %}#}
+            {#                {% for project in project_objs %}#}
+            {#                    {% for member in team_members %}#}
+            {#                        {% if  member != user and project.id == p_obj.project_id and member.id == p_obj.assigned_to_id  %}#}
+            {#                            <tr>#}
+            {#                                <td style="text-decoration-line: no-line-through;text-align: center">{{ project.project_name }}</td>#}
+            {#                                <td style="text-align: center">{{ member.username }}</td>#}
+            {#                                <td style="text-align: center"><a href="{% url "edit_timesheet" pk=member.id %}?date={{ today }}">View Timesheet</a></td>#}
+            {#                            </tr>#}
+            {#                        {% endif %}#}
+            {#                    {% endfor %}#}
+            {#                {% endfor %}#}
+            {#            {% endfor %}#}
+            {% for member in team_member %}
+                {% if member.assigned_to != user %}
+                    <tr>
+                        <td style="text-decoration-line: no-line-through;text-align: center">{{ member.project.project_name }}</td>
+                        <td style="text-align: center">{{ member.assigned_to }}</td>
+                        <td style="text-align: center"><a href="{% url "edit_timesheet" pk=member.assigned_to_id %}?date={{ today }}">View Timesheet</a></td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}

@@ -1,0 +1,8 @@
+
+    
+Hi <strong>{{ name }}</strong>,
+<strong>{{ sender }}</strong> has submitted a timesheet.
+To review timesheet, please <a href ="{{ link }}"> click here </a> 
+
+
+

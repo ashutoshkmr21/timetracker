@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Timesheet Creation Form{% endblock %}
+{% block content %}
+    <script type="text/javascript">
+        $(function() {
+            $('#myForm tbody tr').formset({
+                prefix: '{{ formset.prefix }}'
+            });
+        })
+    </script>
+    {% if project_assigned %}
+        <form method="POST" id="myForm">{% csrf_token %}
+            {{ formset.management_form }}
+            <table style="width: 1200px;border: 2px solid">
+                <tr>
+                    <th>Project</th>
+                    <th>Issue Id</th>
+                    <th>Description</th>
+                    <th>Mon</th>
+                    <th>Tue</th>
+                    <th>Wed</th>
+                    <th>Thu</th>
+                    <th>Fri</th>
+                    <th>Sat</th>
+                    <th>Sun</th>
+                </tr>
+                <tbody>
+                {% for form in formset %}
+                    <tr>
+                        {% for field in form %}
+                            <td style="">{{ field }}</td>
+                        {% endfor %}
+                        <td>{% if form.instance.pk %}{{ form.DELETE }}{% endif %}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <button type="submit" value="Submit" >Submit</button>
+        </form>
+    {% else %}
+        <h3>No Project Assigned to create Timesheet</h3>
+    {% endif %}
+{% endblock %}

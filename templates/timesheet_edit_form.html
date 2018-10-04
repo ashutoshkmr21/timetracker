@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}Timesheet Creation Form{% endblock %}
+{% block external %}
+
+    <script src={% static 'datepicker3.js' %}></script>
+    <link rel="stylesheet" type="text/css" href={% static 'datepicker1.css' %} />
+{% endblock %}
+{% block content %}
+
+    <script type="text/javascript" xmlns="http://www.w3.org/1999/html">
+
+        $(function() {
+
+            $('#myForm tbody tr').formset({
+                prefix: '{{ formset.prefix }}'
+            });
+
+            $( ".date" ).datepicker({
+                changeYear: true,
+                changeMonth: true,
+                numberOfMonths: 1
+            });
+        })
+    </script>
+    <div style="margin-left: 200px; border: 2px solid;width: 500px"><span style="margin-left: 10px;margin-right: 20px"><a href="{% url 'edit_timesheet' requested_user %}?date={{ previous_week }}">Previous Week</a></span><span>{{ s_date }}-{{ e_date }}</span><span style="margin-left: 20px"><a href="{% url 'edit_timesheet' requested_user  %}?date={{ next_week }}">Next Week</a></span></div>
+    {% if project_assigned or requested_flag  %}
+        <form method="POST" id="myForm" action="/timetracking/edit_timesheet/{{ user.id }}/">{% csrf_token %}
+            <input type="hidden" value="{{ s_date }}" id="date" name="date">
+            {{ formset.management_form }}
+            <table style="width: 1200px;border: 2px solid">
+                <tr>
+                    <th>Project</th>
+                    <th>Issue Id</th>
+                    <th>Description</th>
+                    <th>Mon</th>
+                    <th>Tue</th>
+                    <th>Wed</th>
+                    <th>Thu</th>
+                    <th>Fri</th>
+                    <th>Sat</th>
+                    <th>Sun</th>
+                </tr>
+                <tbody>
+                {% if week_time_spent_nonedit %}
+                    {% for week_time in week_time_spent_nonedit %}
+                        <tr>
+                            <td style="text-align: center">{{ week_time.project }}</td>
+                            <td style="text-align: center">{{ week_time.issue_id }}</td>
+                            <td style="text-align: center">{{ week_time.issue_description }}</td>
+                            <td style="text-align: center">{{ week_time.mon }}</td>
+                            <td style="text-align: center">{{ week_time.tue }}</td>
+                            <td style="text-align: center">{{ week_time.wed }}</td>
+                            <td style="text-align: center">{{ week_time.thu }}</td>
+                            <td style="text-align: center">{{ week_time.fri }}</td>
+                            <td style="text-align: center">{{ week_time.sat }}</td>
+                            <td style="text-align: center">{{ week_time.sun }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+                {% if edit_flag %}
+                    {% for form in formset %}
+                        <tr>
+                            {% for field in form %}
+                                <td style="">{{ field }}</td>
+                            {% endfor %}
+                            <td>{% if form.instance.pk %}{{ form.DELETE }}{% endif %}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                    </table>
+                    <button type="submit" value="Submit" >Save</button>
+                    </form>
+                    <a href="{% url 'send_mail' user.id %}?date={{ s_date }}"> <button value="Submit">Submit</button></a>
+
+                    <form action="/timetracking/edit_timesheet/{{user.id  }}" method="get">
+                        <input type="hidden" value="{{ s_date }}" id="current_date" name="current_date">
+                        <label for="from">Copy Week To</label>
+                        <input type="text" class="date" name="date" required="true">
+                        <input type="submit" value="Copy" >
+                    </form>
+
+                {% endif %}
+    {% else %}
+        <h3>No Timesheet Exist</h3>
+    {% endif %}
+{% endblock %}

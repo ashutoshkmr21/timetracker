@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}User Login{% endblock %}
+{% block head %}User Login{% endblock %}
+{% block content %}
+    {% if user.is_authenticated %}
+
+    <p>Already logged in <a href="{% url 'main_page' %}">Click here </a> to go to main page.</p>
+
+   {% else %}
+<form method="post" action="{% url 'django.contrib.auth.views.login' %}">{% csrf_token %}
+{{ form.as_p }}
+<input type="submit" value="login" />
+<input type="hidden" name="next" value="{{ next }}" />
+</form>
+
+   {% endif %}
+{% endblock %}

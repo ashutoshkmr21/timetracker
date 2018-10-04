@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+    <div style="width: 300px;margin-left: 250px;border: 2px solid">
+        <h1 style="text-align: center">Projects</h1>
+        <table>
+            {% for project in object_list %}
+                <tr>
+                    <td style="text-align: center;width: 150px">{{ project.project_name }}</td>
+                    <td style="text-align: center;width: 100px"><a href="{% url "edit-project" pk=project.id %}">Edit</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% if is_paginated %}
+        <div class="pagination" style="width: 300px;margin-left: 250px;border: 2px solid;margin-top: 10px;padding-left: 10px;">
+            <span class="page-links">
+                {% if page_obj.has_previous %}
+                    <a href="/projects/projects_list?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+                <span class="page-current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+                {% if page_obj.has_next %}
+                    <a href="/projects/projects_list?page={{ page_obj.next_page_number }}">next</a>
+                {% endif %}
+            </span>
+        </div>
+    {% else %}
+        <h3>Projects</h3>
+        <p>No More Projects</p>
+    {% endif %}
+    <a href="{% url "createProject" %}">add project</a>
+{% endblock %}

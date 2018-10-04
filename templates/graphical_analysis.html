@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block title %}Welcome to TimeTrack{% endblock %}
+{% block external %}
+    <script src={% static 'datepicker2.js' %}></script>
+    <script src={% static 'datepicker1.js' %}></script>
+    <script src={% static 'datepicker3.js' %}></script>
+    <link rel="stylesheet" type="text/css" href={% static 'datepicker1.css' %} />
+{% endblock %}
+{% block content %}
+
+    <script>
+        $(function() {
+            $( ".date" ).datepicker({
+                changeYear: true,
+                changeMonth: true,
+                numberOfMonths: 1
+            });
+        });
+    </script>
+
+    {% if org_admin or team_admin  %}
+        {% if members %}
+            <h3>Members Graphical Analysis</h3>
+            <div style="border: 2px solid;width: 100%;height: 100px">
+                <form action="/timetracking/graph_view/" method="post">{% csrf_token %}
+                    <input type="hidden" value="member" name="filter">
+                    <label>Select Member(s)</label>
+                    <select multiple required="true" name="member">
+                        {% for member in members %}
+                            <option value="{{ member }}">{{ member }}</option>
+                        {% endfor %}
+                    </select>
+                    <label >Select Graph Type</label>
+                    <select name="graph_type">
+                        <option value="split" selected>Split</option>
+                        <option value="aggregate">Aggregate</option>
+                    </select>
+                    <label for="from">Select Week Date for Report</label>
+                    <input type="text" class="date" name="date" required="true">
+
+                    <input type="submit" value="Submit">
+                </form>
+            </div>
+        {% endif %}
+        {% if projects %}
+            <h3>Projects Graphical Analysis</h3>
+            <div style="border: 2px solid;width: 100%;height: 100px">
+                <form action="/timetracking/graph_view/" method="post">{% csrf_token %}
+                    <input type="hidden" value="project" name="filter">
+                    <label>Select Project(s)</label>
+                    <select multiple required="true" name="project">
+                        {% for project in projects %}
+                            <option value="{{ project }}">{{ project }}</option>
+                        {% endfor %}
+                    </select>
+                    <label >Select Graph Type</label>
+                    <select name="graph_type">
+                        <option value="split" selected>Split</option>
+                        <option value="aggregate">Aggregate</option>
+                    </select>
+                    <label for="from">Select Week Date for Report</label>
+                    <input type="text" class="date" name="date" required="true">
+
+                    <input type="submit" value="Submit">
+                </form>
+            </div>
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+
+

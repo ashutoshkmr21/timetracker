@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Timesheet Status{% endblock %}
+{% block content %}
+    <table style="width: 600px;border: 2px solid;margin-left: 200px" >
+        <tr>
+            <th>Week</th>
+            <th>Timesheet Status</th>
+        </tr>
+        <tbody>
+        {% for timesheet in timesheet_status %}
+            <tr>
+                <td style="text-align: center"><a href="{% url 'edit_timesheet' pk=user.id %}?date={{ timesheet.start_date }}">{{ timesheet.start_date }} - {{ timesheet.end_date }}</a></td>
+                <td style="text-align: center">{{ timesheet.status }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+
+
+

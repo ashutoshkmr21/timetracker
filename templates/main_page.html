@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Welcome to TimeTrack{% endblock %}
+{% block head %}Welcome to TimeTrack{% endblock %}
+{% block content %}
+    {% if user.username %}
+        <p>Welcome {{ user.username }}!</p>
+        <div>
+            {% if user.user_type == 0 %}
+            {% else %}
+                <p></p>
+            {% endif %}
+        </div>
+    {% else %}
+        <p>Welcome anonymous user!You need to <a href="{% url 'login' %}">login</a></p>
+    {% endif %}
+{% endblock %}
+

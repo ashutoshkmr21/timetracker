@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome to TimeTrack{% endblock %}
+{% block content %}
+
+
+     <script type="text/javascript">
+         $(document).ready(function() {
+             $('#DelBtn').attr('disabled', 'disabled');
+             var count = 1;
+//*******************************************************************
+$('#AddBtn').click(function() {
+
+    $('table tr:nth-child(2)').clone().find("input").each(function() {
+        $(this).val('').attr('id', function(_, id) {
+            return id + count;
+        });
+    }).end().appendTo("table");
+    count++;
+    if (count == 2) {
+        $('#DelBtn').prop('disabled', '');
+
+    }
+    if (count == 5) {
+        $('#AddBtn').prop('disabled', 'disabled');
+    }
+}); //end AddBtn Function
+//*******************************************************************
+$('#DelBtn').click(function() {
+    $("table tr:last").remove();
+    count--;
+    if (count == 1) {
+        $('#DelBtn').prop('disabled', 'disabled');
+        $('#AddBtn').prop('disabled', '');
+    }
+}); //end DelBtn Function
+//*******************************************************************
+        $('#myForm').on('submit', function(action){
+            action.preventDefault();
+
+             var TableData;
+             TableData = $.toJSON(storeTimeSheet());
+
+             $.ajax({
+                 type: "POST",
+                 url: "",
+                 data: {TimeSheet: TableData,csrfmiddlewaretoken:$("input[name=csrfmiddlewaretoken]").val()},
+                 success: function(msg){
+        // return value stored in msg variable
+                 }
+              });
+
+
+        });
+
+        function storeTimeSheet(){
+            var TableData = new Array();
+            $('#TimeSheet tr').each(function(row, tr){
+                TableData[row]={
+                "ProjectId" : $(tr).find('td input:eq(0)').val()
+                , "IssueId" :$(tr).find('td input:eq(1)').val()
+                , "description" : $(tr).find('td input:eq(2)').val()
+                , "mon" : $(tr).find('td input:eq(3)').val()
+                , "tue" : $(tr).find('td input:eq(4)').val()
+                , "wed" : $(tr).find('td input:eq(5)').val()
+                , "thu" : $(tr).find('td input:eq(6)').val()
+                , "fri" : $(tr).find('td input:eq(7)').val()
+                , "sat" : $(tr).find('td input:eq(8)').val()
+                , "sun" : $(tr).find('td input:eq(9)').val()
+                }
+            });
+            TableData.shift();  // first row is the table header - so remove
+            return TableData;
+
+
+
+        }
+
+
+
+}); //end DOM Ready
+    </script>
+
+<form id="myForm">{% csrf_token %}
+<table style="width: 1020px;border: 2px solid" id="TimeSheet">
+    <div>
+        <tr>
+            <th>Project</th>
+            <th>Issue Id</th>
+            <th>Description</th>
+            <th>Mon</th>
+            <th>Tue</th>
+            <th>Wed</th>
+            <th>Thu</th>
+            <th>Fri</th>
+            <th>Sat</th>
+            <th>Sun</th>
+        </tr>
+    </div>
+    <div class="clonedInput">
+       <tr> <td><select style="width: 100px">
+           {% for project in projects %}
+               <option>{{ project.project_id }}</option>
+           {% endfor %}
+       </select></td>
+        <td><input type="text" name="issue_id1" id="issue_id1"  style="width: 120px"/></td>
+        <td><input type="text" name="description1" id="description1"  style="width: 160px"/></td>
+        <td><input type="number" name="mon1" id="mon1" min="0" max="9" value="0" style="width: 40px"/></td>
+        <td><input type="number" name="tue1" id="tue1" min="0" max="9" value="0" style="width: 40px"/></td>
+        <td><input type="number" name="wed1" id="wed1" min="0" max="9" value="0" style="width: 40px"/></td>
+        <td><input type="number" name="thu1" id="thu1" min="0" max="9" value="0" style="width: 40px"/></td>
+        <td><input type="number" name="fri1" id="fri1" min="0" max="9" value="0" style="width: 40px"/></td>
+        <td><input type="number" name="sat1" id="sat1" min="0" max="9" value="0" style="width: 40px"/></td>
+        <td><input type="number" name="sun1" id="sun1" min="0" max="9" value="0" style="width: 40px"/></td>
+         </tr>
+    </div>
+ </table>
+    <div>
+        <input type="button" id="AddBtn" value="add another name" />
+        <input type="button" id="DelBtn" value="remove name" />
+    </div>
+<input type="submit" value="submit">
+</form>
+
+
+{% endblock %}
+
+
+
+

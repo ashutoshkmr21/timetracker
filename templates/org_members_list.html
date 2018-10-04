@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Org Members</h1>
+    <table>
+        {% for member in object_list %}
+            {%  if  member != current_user and member.username != 'ubuntu' %}
+                <tr>
+                    <td>{{ member.username }}</td>
+                    <td><a href="{% url "edit_timesheet" pk=member.id %}?date={{ today }}">View Timesheet</a></td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+    </table>
+{% endblock %}

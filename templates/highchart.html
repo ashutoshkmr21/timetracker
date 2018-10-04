@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load staticfiles %}<!doctype html>
+{% block title %}Analysis{% endblock %}
+{% block external %}
+
+    {#    <script type="text/javascript" src= {%static 'jquery.js'  %}></script>#}
+    <script type="text/javascript" src={% static 'collection/js/highcharts/highcharts.js' %}></script>
+    <script src={% static 'export-csv.js' %}></script>
+    {#    <script src="http://code.highcharts.com/modules/exporting.js"></script>#}
+    {#    <script src="http://highslide-software.github.io/export-csv/export-csv.js"></script>#}
+{% endblock %}
+{% block content %}
+    <script type="text/javascript">
+
+        $(function () {
+
+            $.getJSON("{% url 'bar_view' %}", {graph_type: "{{ graph_type|safe }}", flag: {{ flag|safe }}, date: "{{ date|safe }}",item_list:{{item_list|safe}}}, function(data) {
+                $('#container').highcharts(data);
+            });
+            {#        $.ajax({#}
+            {#                url: {% url 'bar_view' %},#}
+            {#                type: 'GET',#}
+            {#                data: {'date': {{ date }},'item_list':{{ item_list }},'graph_type':{{ graph_type }},'flag':{{ flag }}},#}
+            {#                success: function(data){#}
+            {#                    $('#container').highcharts(data);#}
+            {#                }#}
+            {#        });#}
+
+{#            $('#getcsvAnchor').click(function() {#}
+{#                                var chart = $('#container').highcharts();#}
+{#                                $(this).attr('href', 'data:text/csv;charset=utf-8,'+encodeURI(chart.getCSV()));#}
+{#                                $(this).attr('download', "data-visualisation.csv");#}
+{#                console.log('in csv download');#}
+{#                var a = {{ item_list|safe }}#}
+{#                console.log(a);#}
+{#                $.ajax({#}
+{#                    url: "{% url 'csv_download' %}",#}
+{#                    type: 'GET',#}
+{#                    data: {'date': "{{ date|safe }}",'item_list':{{ item_list|safe }},'graph_type':"{{ graph_type|safe }}",'flag':{{ flag|safe }}},#}
+{#                    success: function(data){#}
+{#                        $('#container').highcharts(data);#}
+{#                        alert(data);#}
+{#                        console.log('success');#}
+{#                    }#}
+{#                });#}
+{##}
+{##}
+{#            });#}
+
+
+        });
+    </script>
+
+
+    <div id="container" style="height: 300px"></div>
+
+{#    <div><a id="getcsvAnchor" href="#"><button>Download CSV</button></a></div>#}
+    <div>
+    <form method="POST" action="/timetracking/csv_download/">{% csrf_token %}
+        <input type="hidden" name="graph_data" value="{{ graph_data }}">
+        <button type="submit">Download CSV</button>
+    </form>
+    </div>
+{% endblock %}

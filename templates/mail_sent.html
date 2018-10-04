@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %}Send Mail Success{% endblock %}
+{% block content %}
+    {% if mail %}
+        <h3>Mail Sent</h3>
+    {% else %}
+        <h3>Please submit a valid timesheet</h3>
+    {% endif %}
+{% endblock %}
